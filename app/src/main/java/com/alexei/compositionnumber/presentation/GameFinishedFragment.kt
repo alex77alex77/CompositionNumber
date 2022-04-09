@@ -5,8 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.alexei.compositionnumber.R
-import com.alexei.compositionnumber.databinding.FragmentChooseLevelBinding
 import com.alexei.compositionnumber.databinding.FragmentGameFinishedBinding
 
 class GameFinishedFragment : Fragment() {
