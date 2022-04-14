@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.alexei.compositionnumber.R
 import com.alexei.compositionnumber.databinding.FragmentWelcomeBinding
+import java.util.logging.Level
 
 
 class WelcomeFragment : Fragment() {
@@ -37,6 +38,7 @@ class WelcomeFragment : Fragment() {
     private fun launchChooseLevelFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.mainContainer, ChooseLevelFragment.newInstance())
+            .addToBackStack(null)
             .commit()
     }
 
@@ -44,4 +46,6 @@ class WelcomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
