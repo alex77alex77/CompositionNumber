@@ -11,17 +11,19 @@ import kotlin.random.Random
 object GameRepositoryImpl : GameRepository {
     private const val MIN_SUM_VALUE = 2
     private const val MIN_ANSWER_VALUE = 1
-    override fun generateQuestion(maxSumValue: Int, countOfOptions: Int): Question {
 
+    override fun generateQuestion(maxSumValue: Int, countOfOptions: Int): Question {
         val sum = Random.nextInt(MIN_SUM_VALUE, maxSumValue + 1)//----генерация суммы
         val visibleNumber = Random.nextInt(MIN_ANSWER_VALUE, sum)//----генерация видимого числа
         val options = HashSet<Int>()//---в этой коллекции все варианты ответов(HashSet - если сгенерированное число уже есть в коллекции то оно небудет добавленно)
         val rightAnswer = sum - visibleNumber//-----------правельный ответ
         options.add(rightAnswer)
 
-        val from = max(rightAnswer - countOfOptions, MIN_ANSWER_VALUE)
-        val to = min(maxSumValue, rightAnswer - countOfOptions)
-        while (options.size < countOfOptions) { //генерация возможных ответов
+        //(вариант чтобы находился рядом с привельным ответом)
+        val from = max(rightAnswer - countOfOptions, MIN_ANSWER_VALUE)//------дапозон для генерации правельных ответов
+        val to = min(maxSumValue, rightAnswer + countOfOptions)//------дапозон для генерации правельных ответов
+
+        while (options.size < countOfOptions) { //пока количество сгенерированных ответов не равно определенному количеству -> генерация возможных ответов
             options.add(Random.nextInt(from, to))
         }
 
