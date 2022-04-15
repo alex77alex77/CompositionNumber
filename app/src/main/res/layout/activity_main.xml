@@ -5,7 +5,9 @@
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.alexei.compositionnumber.presentation.WelcomeFragment"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    app:defaultNavHost="true"
+    app:navGraph="@navigation/main_navigation"
     tools:context=".presentation.MainActivity">
 
 </androidx.fragment.app.FragmentContainerView>
