@@ -1,41 +1,35 @@
 package com.alexei.compositionnumber.presentation
 
 import android.content.res.ColorStateList
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.alexei.compositionnumber.R
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.alexei.compositionnumber.databinding.FragmentGameBinding
-import com.alexei.compositionnumber.databinding.FragmentGameFinishedBinding
 import com.alexei.compositionnumber.domain.entity.GameResult
-import com.alexei.compositionnumber.domain.entity.GameSettings
-import com.alexei.compositionnumber.domain.entity.Level
 
 
 class GameFragment : Fragment() {
+    private val args by  navArgs<GameFragmentArgs>()
     private val viewModelFactory by lazy {
-        GameViewModelFactory(level,requireActivity().application)
+        GameViewModelFactory(args.level,requireActivity().application)
     }
+
     private val viewModel: GameViewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
     }
-    private lateinit var level: Level
+
 
     private var _binding: FragmentGameBinding? = null
     private val binding: FragmentGameBinding
         get() = _binding ?: throw RuntimeException("FragmentGameBinding == null")
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,17 +63,13 @@ class GameFragment : Fragment() {
             }
         }
 
-
         viewModel.percentOfRightAnswer.observe(viewLifecycleOwner) {
-
             binding.progressBar.progress = it
         }
-
 
         viewModel.enoughCountOfRightAnswer.observe(viewLifecycleOwner) {
             binding.tvAnswersProgress.setTextColor(getColorByState(it))
         }
-
 
         viewModel.enoughPercentOfRightAnswer.observe(viewLifecycleOwner) {
             val color = getColorByState(it)
@@ -130,33 +120,13 @@ class GameFragment : Fragment() {
     }
 
     private fun launchGameFinishedFragment(result: GameResult) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.mainContainer, GameFinishedFragment.newInstance(result))
-            .addToBackStack(null)
-            .commit()
+
+        findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameFinishedFragment(result))
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun parseArgs() {
-        requireArguments().getParcelable<Level>(KEY_LEVEL)?.let {
-            level = it
-        }
-    }
-
-    companion object {
-        private const val KEY_LEVEL = "level"
-        const val NAME = "GameFragment"
-
-        fun newInstance(level: Level): GameFragment {
-            return GameFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_LEVEL, level)
-                }
-            }
-        }
     }
 }
